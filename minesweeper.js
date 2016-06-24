@@ -46,8 +46,12 @@ function markCell (evt) {
   evt.preventDefault()
   evt.target.classList.toggle('marked')
   evt.target.classList.toggle('hidden')
+  for (var i = 0; i < board.cells.length; i++) {
+    if (board.cells[i].row === getRow(evt.target) && board.cells[i].col === getCol(evt.target)) {
+      board.cells[i].isMarked === true
+    }
+  }
 }
-
 //  classy and sassy (sassy is irrelevent, just for put there for fun)
 function getRow (element) {
   var classy = element.classList
