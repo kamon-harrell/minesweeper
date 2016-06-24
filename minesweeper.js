@@ -41,14 +41,15 @@ function showCell (evt) {
   showSurrounding(evt.target)
 }
 
-// #2 this flags the bombs
+// #2 this flags the bombs, also checks if theyre flagged
 function markCell (evt) {
   evt.preventDefault()
   evt.target.classList.toggle('marked')
   evt.target.classList.toggle('hidden')
+  //  this is the part that checks if the cell is flagged
   for (var i = 0; i < board.cells.length; i++) {
     if (board.cells[i].row === getRow(evt.target) && board.cells[i].col === getCol(evt.target)) {
-      board.cells[i].isMarked === true
+      board.cells[i].isMarked = true
     }
   }
 }
