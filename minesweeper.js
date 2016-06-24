@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', startGame)
+//  this is the global variable for the game board
 var board = {
   cells: []
 }
@@ -10,13 +11,13 @@ function startGame () {
     addListeners(boardCells[i])
     addCellToBoard(boardCells[i])
   }
-
+//  this is the loop needed to count how far away the mines are
   for (var j = 0; j < board.cells.length; j++) {
     board.cells[j].surroundingMines = countSurroundingMines(board.cells[j])
   }
 }
 
-// check the number of mines around the clicked cell
+//  check the number of mines around the clicked cell
 function countSurroundingMines (cell) {
   var surroundingCells = getSurroundingCells(cell.row, cell.col)
   var count = 0
@@ -25,36 +26,29 @@ function countSurroundingMines (cell) {
       count++
     }
   }
+  return count
 }
 
-function getSurroundingCells (row, col) {
-  var columns = getRange(getLowerBound(col), getUpperBound(col))
-  var rows = getRange(getLowerBound(row), getUpperBound(row))
-  return board.cells
-    .filter(function (cell) {
-      return columns.includes(cell.col) && rows.includes(cell.row)
-    })
-}
-
-//  this listens to the functions below and dictates how to execute their behaviours
+//  this listens to the functions(#1,#2) below and dictates how to execute their behaviours
 function addListeners (element) {
   element.addEventListener('click', showCell)
   element.addEventListener('contextmenu', markCell)
 }
 
-//  shows cell
+// #1 shows cell on click
 function showCell (evt) {
   evt.target.classList.remove('hidden')
+  showSurrounding(evt.target)
 }
 
-//  this flags the bombs
+// #2 this flags the bombs
 function markCell (evt) {
   evt.preventDefault()
   evt.target.classList.toggle('marked')
   evt.target.classList.toggle('hidden')
 }
 
-//  classy and sassy
+//  classy and sassy (sassy is irrelevent, just for put there for fun)
 function getRow (element) {
   var classy = element.classList
   for (var i = 0; i < classy.length; i++) {
@@ -64,7 +58,7 @@ function getRow (element) {
   }
 }
 
-//  classy and sassy
+//  classy and sassy (sassy is irrelevent, just for put there for fun)
 function getCol (element) {
   var classy = element.classList
   for (var i = 0; i < classy.length; i++) {
@@ -82,4 +76,45 @@ function addCellToBoard (element) {
     isMine: element.classList.contains('mine')
   }
   board.cells.push(newCell)
+}
+
+// pulled everything below from lib, could refactor to just pull functions and not all of the code, since it already exists in lib
+function getSurroundingCells (row, col) {
+  var columns = getRange(getLowerBound(col), getUpperBound(col))
+  var rows = getRange(getLowerBound(row), getUpperBound(row))
+  return board.cells
+    .filter(function (cell) {
+      return columns.includes(cell.col) && rows.includes(cell.row)
+    })
+}
+
+//  Avoid breaking the call stack with recurrent checks on same cell
+function showSurrounding (element) {
+  getSurroundingCells(getRow(element), getCol(element))
+    .filter(function (cell) {
+      return !cell.isMine
+    })
+    .filter(function (cell) {
+      return !cell.isProcessed
+    })
+    .forEach(setInnerHTML)
+}
+
+//  #1, these 3 functions apply info to countSurroundingCells
+function getRange (begin, end) {
+  return Array.apply(begin, Array(end - begin + 1))
+    .map(function (n, i) {
+      return begin + i
+    })
+}
+
+//  #2
+function getLowerBound (n) {
+  return n - 1 < 0 ? 0 : n - 1
+}
+
+//  #3
+function getUpperBound (n) {
+  var limit = board.MAX_CELLS - 1 || 4
+  return n + 1 > limit ? limit : n + 1
 }
