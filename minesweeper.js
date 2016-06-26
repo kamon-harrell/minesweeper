@@ -39,6 +39,7 @@ function addListeners (element) {
 function showCell (evt) {
   evt.target.classList.remove('hidden')
   showSurrounding(evt.target)
+  checkForWin(evt)
 }
 
 // #2 this flags the bombs, also checks if theyre flagged
@@ -52,8 +53,25 @@ function markCell (evt) {
       board.cells[i].isMarked = true
     }
   }
+  checkForWin(evt)
 }
-//  classy and sassy (sassy is irrelevent, just for put there for fun)
+
+//  WIN FUNCTION
+function checkForWin (evt) {
+  for (var i = 0; i < board.cells.length; i++) {
+    if (board.cells[i].isMine === true && board.cells[i].isMarked === true) {
+      return
+    }
+    for (var j = 0; j < board.cells.length; j++) {
+      if (board.cells[j].classList.contains('hidden')) {
+        return
+      }
+    }
+    alert('WINNER!')
+  }
+}
+
+//  classy and sassy (sassy is irrelevent, just put there for fun!)
 function getRow (element) {
   var classy = element.classList
   for (var i = 0; i < classy.length; i++) {
@@ -63,7 +81,7 @@ function getRow (element) {
   }
 }
 
-//  classy and sassy (sassy is irrelevent, just for put there for fun)
+//  classy and sassy (sassy is irrelevent, just put there for fun!)
 function getCol (element) {
   var classy = element.classList
   for (var i = 0; i < classy.length; i++) {
@@ -123,3 +141,4 @@ function getUpperBound (n) {
   var limit = board.MAX_CELLS - 1 || 4
   return n + 1 > limit ? limit : n + 1
 }
+
