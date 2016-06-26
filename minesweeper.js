@@ -56,14 +56,14 @@ function markCell (evt) {
   checkForWin(evt)
 }
 
-//  WIN FUNCTION
 function checkForWin (evt) {
+  var boardCells = (document.getElementsByClassName('board')[0].children)
   for (var i = 0; i < board.cells.length; i++) {
     if (board.cells[i].isMine === true && board.cells[i].isMarked === true) {
       return
     }
-    for (var j = 0; j < board.cells.length; j++) {
-      if (board.cells[j].classList.contains('hidden')) {
+    for (var j = 0; j < boardCells.length; j++) {
+      if (boardCells[j].classList.contains('hidden')) {
         return
       }
     }
