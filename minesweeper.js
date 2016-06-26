@@ -37,6 +37,9 @@ function addListeners (element) {
 
 // #1 shows cell on click
 function showCell (evt) {
+  if (evt.target.classList.contains('mine')) {
+    showAllMines(evt)
+  }
   evt.target.classList.remove('hidden')
   showSurrounding(evt.target)
   checkForWin(evt)
@@ -54,6 +57,16 @@ function markCell (evt) {
     }
   }
   checkForWin(evt)
+}
+
+function showAllMines (evt) {
+  var boardCells = (document.getElementsByClassName('board')[0].children)
+  for (var i = 0; i < board.cells.length; i++) {
+    if (boardCells[i].classList.contains('mine')) {
+      boardCells[i].classList.remove('hidden')
+    }
+    alert('BOOM!')
+  }
 }
 
 function checkForWin (evt) {
@@ -141,4 +154,3 @@ function getUpperBound (n) {
   var limit = board.MAX_CELLS - 1 || 4
   return n + 1 > limit ? limit : n + 1
 }
-
