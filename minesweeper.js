@@ -65,8 +65,8 @@ function showAllMines (evt) {
     if (boardCells[i].classList.contains('mine')) {
       boardCells[i].classList.remove('hidden')
     }
-    alert('BOOM!')
   }
+    alert('BOOM!')
 }
 
 function checkForWin (evt) {
@@ -80,8 +80,8 @@ function checkForWin (evt) {
         return
       }
     }
-    alert('WINNER!')
   }
+    alert('WINNER!')
 }
 
 //  classy and sassy (sassy is irrelevent, just put there for fun!)
